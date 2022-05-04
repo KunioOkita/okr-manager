@@ -1,0 +1,158 @@
+@startuml
+skinparam class {
+    BackgroundColor METAL
+    BorderColor Black
+    ArrowColor Black
+}
+
+/' ユーザ '/
+entity "users" as users {
+    + id [PK]
+    --
+    provider
+    uid
+    name
+    mail
+    image_url
+    created_at
+    updated_at
+}
+
+/' 部 '/
+entity "departments" as departments {
+    + id [PK]
+    --
+    name
+    created_at
+    updated_at
+}
+
+/' グループ '/
+entity "teams" as teams {
+    + id [PK]
+    --
+    # depertment_id [FK]
+    name
+    created_at
+    updated_at
+}
+
+
+/' チーム '/
+entity "user_teams" as user_teams {
+    + id   [PK]
+    --
+    # user_id [FK]
+    # team_id [FK]
+    created_at
+    updated_at
+}
+
+entity "objectives" as objectives {
+    + id [PK]
+    --
+    content
+    details
+    created_at
+    updated_at
+}
+
+entity "keyresults" as keyresults {
+    + id [PK]
+    --
+    content
+    details
+    rating
+    rating_comment
+    created_at
+    updated_at
+}
+
+/' 振り返りメモ '/
+entity "keyresult_reviews" as keyresult_reviews {
+    + id [PK]
+    --
+    # keyresult_id [FK]
+    content
+    created_at
+    updated_at
+}
+
+entity "okrs" as okrs {
+    + id [PK]
+    --
+    # objective_id [FK]
+    # keyresult_id [FK]
+    created_at
+    updated_at
+}
+
+entity "okr_keyresult_relations" as okr_keyresult_relations {
+    + id [PK]
+    --
+    # okr_id [FK]
+    # kryresult_id [FK]
+    created_at
+    updated_at
+}
+
+entity "depertment_okrs" as depertment_okrs {
+    + id [PK]
+    --
+    # department_id [FK]
+    # okr_id [FK]
+    created_at
+    updated_at
+}
+
+entity "team_okrs" as team_okrs {
+    + id [PK]
+    --
+    # team_id [FK]
+    # okr_id [FK]
+    created_at
+    updated_at
+}
+
+entity "personal_okrs" as personal_okrs {
+    + id [PK]
+    --
+    # user_id [FK]
+    # okr_id [FK]
+    created_at
+    updated_at
+}
+
+entity "okr_durations" as okr_durations {
+    + id [PK]
+    --
+    name
+    start_at
+    end_at
+    state
+    create_at
+    updated_at
+}
+
+users ||--o{ user_teams
+user_teams }o--o{ teams
+departments ||--o{ teams
+
+objectives }o--o{ okrs
+keyresults }o--o{ okrs
+keyresults ||--o{ keyresult_reviews
+okr_durations ||--o{ okrs
+
+okr_keyresult_relations }o--o{ okrs
+okr_keyresult_relations }o--o{ keyresults
+
+depertment_okrs }o--o{ departments
+depertment_okrs }o--o{ okrs
+
+team_okrs }o--o{ teams
+team_okrs }o--o{ okrs
+
+personal_okrs }o--o{ users
+personal_okrs }o--o{ okrs
+
+@enduml
